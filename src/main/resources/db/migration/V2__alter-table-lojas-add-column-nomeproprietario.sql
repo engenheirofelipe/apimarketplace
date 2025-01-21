@@ -1,0 +1,1 @@
+alter table lojas add nomeproprietario varchar(20) not null;
