@@ -1,7 +1,6 @@
 package marketplace.com.apimarketplace.loja;
 
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
 import lombok.*;
 import marketplace.com.apimarketplace.endereco.Endereco;
 
@@ -63,14 +62,14 @@ public class Loja {
 
     }
 
-    public Loja(DadosCadastroLoja loja) {
-        this.nome = loja.nome();
-        this.email = loja.email();
-        this.telefone = loja.telefone();
-        this.cnpj = loja.cnpj();
-        this.nomeproprietario = loja.nomeproprietario();
-        this.nicho = loja.nicho();
-        this.endereco = new Endereco(loja.endereco());
+    public Loja(DadosCadastroLoja dadosCadastro) {
+        this.nome = dadosCadastro.nome();
+        this.email = dadosCadastro.email();
+        this.telefone = dadosCadastro.telefone();
+        this.cnpj = dadosCadastro.cnpj();
+        this.nomeproprietario = dadosCadastro.nomeproprietario();
+        this.nicho = dadosCadastro.nicho();
+        this.endereco = new Endereco(dadosCadastro.endereco());
     }
 
     public void atualizarDados( DadosAtualizadosLoja dados) {

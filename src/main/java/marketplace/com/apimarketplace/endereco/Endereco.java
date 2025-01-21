@@ -22,15 +22,16 @@ public class Endereco {
 
     }
 
-    public Endereco(DadosEndereco loja) {
-        this.logradouro = loja.logradouro();
-        this.numero = loja.numero();
-        this.complemento = loja.complemento();
-        this.bairro = loja.bairro();
-        this.cidade = loja.cidade();
-        this.uf = loja.uf();
-        this.cep = loja.cep();
+    public Endereco(DadosEndereco dadosCadastro) {
+        this.logradouro = dadosCadastro.logradouro();
+        this.numero = dadosCadastro.numero();
+        this.complemento = dadosCadastro.complemento();
+        this.bairro = dadosCadastro.bairro();
+        this.cidade = dadosCadastro.cidade();
+        this.uf = dadosCadastro.uf();
+        this.cep = dadosCadastro.cep();
     }
+
 
     public void atualizarDados(DadosEndereco dados) {
         if(dados.logradouro() != null) {
@@ -60,8 +61,5 @@ public class Endereco {
         if(dados.cep() != null) {
             this.cep = dados.cep();
         }
-
-
-
     }
 }

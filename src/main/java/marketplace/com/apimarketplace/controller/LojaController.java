@@ -19,8 +19,8 @@ public class LojaController {
 
     @PostMapping
     @Transactional
-    public void cadastrarLoja( @RequestBody @Valid DadosCadastroLoja loja) {
-        repository.save(new Loja(loja));
+    public void cadastrarLoja( @RequestBody @Valid DadosCadastroLoja dadosCadastro) {
+        repository.save(new Loja(dadosCadastro));
     }
 
     @GetMapping
@@ -40,7 +40,4 @@ public class LojaController {
     public void excluirLoja(@PathVariable long id){
         repository.deleteById(id);
     }
-
-
-
 }
