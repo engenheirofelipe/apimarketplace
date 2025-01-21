@@ -8,4 +8,5 @@
 
 ###   TECNOLOGIAS UTILIZADAS 
 
-*   Liguagem de programação : <img src="https://logos-download.com/wp-content/uploads/2016/10/Java_logo_icon.png" width="60px" height="40px"/> 
+*   Liguagem de programação :  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg" />
+          
