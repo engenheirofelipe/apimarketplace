@@ -1,4 +1,4 @@
-package marketplace.com.apimarketplace.loja;
+package marketplace.com.apimarketplace.domain.loja;
 
 import marketplace.com.apimarketplace.endereco.DadosEndereco;
 

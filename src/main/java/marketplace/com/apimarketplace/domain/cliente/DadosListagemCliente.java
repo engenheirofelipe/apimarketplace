@@ -1,6 +1,4 @@
-package marketplace.com.apimarketplace.cliente;
-
-import marketplace.com.apimarketplace.endereco.DadosEndereco;
+package marketplace.com.apimarketplace.domain.cliente;
 
 public record DadosListagemCliente(Long id, String nome, String email, String cpf, String telefone) {
 

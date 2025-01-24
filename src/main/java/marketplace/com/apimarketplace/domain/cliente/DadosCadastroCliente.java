@@ -1,4 +1,4 @@
-package marketplace.com.apimarketplace.cliente;
+package marketplace.com.apimarketplace.domain.cliente;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

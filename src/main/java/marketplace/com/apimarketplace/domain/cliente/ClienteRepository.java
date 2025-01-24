@@ -1,4 +1,4 @@
-package marketplace.com.apimarketplace.cliente;
+package marketplace.com.apimarketplace.domain.cliente;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

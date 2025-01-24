@@ -1,4 +1,4 @@
-package marketplace.com.apimarketplace.loja;
+package marketplace.com.apimarketplace.domain.loja;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -57,6 +57,24 @@ public class Loja {
         this.cnpj = cnpj;
     }
 
+    // Getter e Setter para cnpj
+    public String getNomeproprietario() {
+        return nomeproprietario;
+    }
+
+    public void setNomeproprietario(String nomeproprietario) {
+        this.nomeproprietario = nomeproprietario;
+    }
+
+    // Getter e Setter para cnpj
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
 
     public Loja() {
 
@@ -86,4 +104,6 @@ public class Loja {
         }
 
     }
+
+
 }

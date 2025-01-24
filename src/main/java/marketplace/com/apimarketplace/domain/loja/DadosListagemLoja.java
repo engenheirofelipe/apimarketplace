@@ -1,4 +1,4 @@
-package marketplace.com.apimarketplace.loja;
+package marketplace.com.apimarketplace.domain.loja;
 
 public record DadosListagemLoja(Long id, String nome, String email, String cnpj) {
 

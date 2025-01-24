@@ -1,3 +1,5 @@
+#   Primeiro Curso da formação Spring Boot
+
 #   Objetivos
 
 *   Desenvolvimento de uma API Rest
@@ -194,5 +196,91 @@ return repository.findAllByAtivoTrue(paginacao).map(DadosListagemLoja::new);
 }
 
 *   Em LojaRepository, adicionar Page<Loja> findAllByAtivoTrue(Pageable paginacao);
+
+
+#   Segundo Curso da Formação Spring Boot
+
+##  Objetivos :
+*   Boas práticas na API em relação ao protocolo http. Quanto ao retorno e respostas que api edvolve
+*   Tratamento de erros, exceptions.
+*   Segurança, controle de autenticação e autorização da API
+*   Autenticação baseada em Tokens com padrões web token JWT
+
+##  Padronizando retornos da API
+
+### Classe LojaControler - Método excluir
+
+*   Ver que os métodos estão devolvendo void da classe LojaController e devolve o código 200. Precisa devolver o código 204. A requisição 204 não tem um conteúdo, não tem um corpo
+*   Começando pelo método excluir.
+*   Utilizar uma classe do próprio spring chamado ResponseEntity
+*   Colocar return e instanciar o objeto ResponseEntity. Nessa classe existe vários métodos, escolher o noContent() que vai criar o objeto, e tem que chamar o build() para construir o objeto
+*   return ResponseEntity.noContent().build(); 
+*   Voltar no insomnia para disparar a requisição DELETE e ver se devolve requisição 204.
+*   Adicionar a classe ResponseEntity em todos os métodos.
+* 
+### Classe LojaControler - Método listar
+
+*   No método listar , criar uma variável page para o repository
+*   E colocar o código return ResponseEntity.ok(page). Então no método listar vai devolver o código 200 
+
+### Classe LojaControler - Método atualizar
+
+*   No método atualizar , tem que devolver o objeto a informação que foi atualizada. Então devolve os dados da loja atualizados
+*   return ResponseEntity.ok(DTO)
+*   return ResponseEntity.ok(new DadosAtualizacaoTotalLoja(loja));
+*   Criar a record no pacote loja, e inserir as informações da loja
+*   Ainda na DTO adicionar o construtor que recebe objeto loja
+*   public DadosDetalhamentoLoja(Loja loja){
+    this(loja.getId(), loja.getNome(), loja.getEmail(), loja.getCnpj(), loja.getNomeproprietario, loja.getNicho, loja.getEndereco())
+
+##  Devolvendo código HTTP 201
+
+### No método cadastrar 
+
+*   Para entender melhor, quando é feito o cadastro na API, o método devolve o código 201 (created), que representa que o registro foi criado na api, que no corpo da resposta deve ser devolvido os dados do registro e devolve um cabeçalho do protocolo http (endereco pro front end acessar o que foi cadastrado)
+*   Para criar o objeto response entity, no método adicionar -> return ResponseEntity.created(uri).body(new DadosDetalhamentoLoja(loja));
+*   O Spring possui uma classe para trabalhar com uri, então como parametro do método cadastrar, adicionar UriComponentsBuilder uriBuilder
+*   Acima da linha do return adicionar -> var uri = uriBuilder.path("/lojas/{id}").buildAndExpand(loja.getId()).toUri();
+*   Modificar o código para -> var loja = new Loja(loja)
+                               repository.save(loja)
+
+##  Detalhando dados de loja na API
+
+*   Criar uma nova requisição no insomnia do tipo GET (detalhamento dados)
+*   Criar método detalhar :
+    @GetMapping("/{id}")
+    public ResponseEntity detalharLoja(@PathVariable Long id){
+        var loja = repository.getReferenceById(id)
+        return ResponseEntity.ok(new DadosAtualizacaoTtoalLoja(loja))
+    }
+
+##  Lidando com erros
+
+### Erro 404
+
+*   Caso enviar requisição para um id que não existe o erro é 500, erro interno do servidor da api backend.
+*   É preciso tratar esses erros.
+*   Ler documentação spring boot application properties.
+*   Adicionar no application.properties - server.error.include-stacktrace=never
+*   Criar uma classe para devolver o erro 404
+*   Inserir os pacotes loja, cliente e controller dentro de um pacote chamado domain.
+  *   Criar um novo pacote chamado infra e dentro desse pacote criar a classe tratadorDeErros
+      Na classe tratadorDeErros :
+          @RestControllerAdvice, é uma anotação específica para tratamento de erros.
+                                                        @ExceptionHandler(EntityNotFoundException.class) -> Em qualquer controller se for lançada essa exception da entity not found, chama o método tratarErro404
+          Criar método para EntityNotFound Exception. -> public ResponseEntity tratarErro404{
+                                                            return ResponseEntity.notFound().build();
+                                                        }
+  *  Com isso feito, a mensagem de erro não será mais tratada pelo spring e sim será tradada pelo classe TratadorDeErros
+
+### Erro 400
+
+*   Dados incorretos de validação
+*   Criar método tratarErro 400
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity tratarErro400(){
+        return ResponseEntity.badRequest().build()
+    }
 
 
