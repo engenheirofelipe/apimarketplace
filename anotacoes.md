@@ -283,4 +283,106 @@ return repository.findAllByAtivoTrue(paginacao).map(DadosListagemLoja::new);
         return ResponseEntity.badRequest().build()
     }
 
+##  Autenticação e autorização - Controle de acesso
+
+*   O Spring tem o módulo especóifico para trabalhar com segurança que é o Spring security.
+    1.  Autenticação
+    2.  Autorização -> Controle de acesso, para liberar requisição da api. Controle de permissão específico pro usuário.
+    3.  Proteção contra ataques -> CSRF, clickjacking, etc.
+
+*   Lembrar que uma autenticação de uma aplicação web é diferente de uma autenticação de uma API Rest.
+
+### Autenticação de uma aplicação web
+
+*  O servidor guarda um espaço pra cada usuário na memória. E cada sessão tem dados específicos de cada usuário (Stateful)
+
+### Autenticação APIRest
+
+*   Não guarda estado (Stateless). Então o cliente da API dispara a requisição, o servidor processa essa requisição devolve a resposta. Na próxima requisição o servidor não lembra do cliente.
+
+#### Prosseguindo :
+
+*   Utilizar o JWT - Json Web Token como protocolo de gerenciamento dos tokens.
+
+### Autorização login
+<img src="./img/autenticacao.png" width="500" height="300">
+
+Exemplo para cliente da API
+A aplicação pega os dados de login e senha e dispara requisição para api backend.
+1.  Requisição ser disparada pelo aplicativo para api e no corpo da requisição vai o json com os dados digitados na tela
+2.  Pega o login e senha e veja se é valido. Acessa o banco de dados e ver a validação dos dados nas tabelas e se tiver válido, com os dados corretos vai pro terceiro passo.
+3.  Api gera um token.  segue padrao JWT, e o token é devolvido para aplicação do cliente.
+4.  Devolve token JWT para o aplicativo. Esse token deve ser guardado pelo aplicativo . Esse token vai verificar que o usuário está logado
+
+### Próximas requisições
+
+<img src="./img/proximas_autenticacoes.png" width="500" height="300">
+
+1.  O cliente da API, através do aplicativo , dispara a requisição para cadastrar uma nova loja por exemplo, e além de na requisição enviar os dados do corpo, vai ter que incluir o cabeçalho "authorization : beare TOKEN_JWT"
+2.  Validar o token, se não for válido ou se não estiver vindo a requisição já é interrompida.
+
+*  Esse é o motivo da autenticação stateless. Não existe uma sessão que diz se o usuário está ou não logado.
+
+##  Começando com o Spring Security
+
+*   Adicionando dependencias
+    pom.xml -> 
+    
+    <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+1.  Só de adicionar as dependencias, o spring já faz uma configuração padrão. Roda o código e vai aparecer no console :
+
+Using generated security password: e93b5b0c-31fe-4df8-a21f-fc9dc9062c1c
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2.  Adicionar a url http://localhost:8080/lojas, e irá pedir usuário  e senha. Inserir user como usuario e a senha que foi gerada automaticamente quando as dependencias foram adicionadas
+
+### Entidade usuário e migration
+
+*   Criar pacote usuario dentro do pacote domain. Dentro do pacote usuario criar a classe usuario.
+
+    @Table(name = "usuarios")
+    @Entity(name = "Usuario)
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @EqualsAndHashCode(of = "id")
+*  public class Usuario(){
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String usuario;
+    private String senha;
+}
+
+*  criar nova migration V5__create-table-usuarios.sql
+
+### Repository e Service
+
+*   Criar interface UsuarioRepository, no pacote usuario.
+*   Lembrar de herdar de JpaRepository e passar os generics. 
+*   Com o repository pronto, qualquer consulta no banco de dados usa-se o usuário repository .
+*   Criar algumas classes para o spring security. AutenticacaoService é uma classe onde o Spring já vai reconhecê-la
+*   Com a classe AutenticacaoService criada , adicionar a anotação @Service.
+*   Além disso para o Spring reconhecer a funcionalidade dessa classe criada, ela precisa implementar a classe UserServiceDetails, uma classe do Spring 
+*   Então essa classe AutenticacaoService utiliza o UsuarioRepository para acessar o banco de dados.
+
+*   Então toda vez que o usuário inserir seu login, ele chama a classe AutenticacaoService passando o método loadUsername, carregando o parametro username que foi digitado pelo usuario.
+*   o método findByLogin é o método que faz a consulta de usuário no banco de dados.
+
+### Configuração de Segurança
+
+
+
+
 
